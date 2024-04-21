@@ -7,7 +7,10 @@ export default function App() {
   const [err , setErr] = useState("")
 
   useEffect(()=>{ 
-    axios.get('https://dummyjson.com/products/')
+    axios({
+      url: 'https://dummyjson.com/products/',
+      module : "Get",    
+    })
     .then(response=>{
       let res = JSON.stringify(response.data);
       setIsvissible(false);
