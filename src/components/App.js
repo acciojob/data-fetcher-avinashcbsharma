@@ -3,33 +3,30 @@ import axios from 'axios';
 
 export default function App() {
   const [isvissible, setIsvissible] = useState(true);
-  const [apidata, setApidata] = useState([]);
+  const [apidata, setApidata] = useState(null);
+  const [err , setErr] = useState("")
 
-  useEffect(()=>{
-    const fetchdata = async () =>{
-      try{
-        let response = await axios.get('https://dummyjson.com/products');
-        response = JSON.stringify(response.data);
-        setIsvissible(false);
-        setApidata(response);
-        console.log("Fetched Data: ",response);
-
-      }
-      catch(error){
-        console.log(error);
-      }
-    }
-    fetchdata();
+  useEffect(()=>{ 
+    axios.get('https://dummyjson.com/products/')
+    .then(response=>{
+      let res = JSON.stringify(response.data);
+      setIsvissible(false);
+      setApidata(res);
+      console.log("Fetched Data: ",res);
+    })
+    .catch(function (error) {
+        let err = JSON.stringify(error.message);
+        console.log(err);
+        setErr(err);
+    });
   },[])
 
-  return (
+ return (
     <div>
-      { isvissible && <p>loading</p>}
-      
-      <div>
-        <h4><u>OUTPUT</u></h4>
-        {apidata}
-      </div>    
+      { isvissible && <p>loading...</p>}
+      { err && <p>{err}</p>}            
+      { !isvissible && <h1>Data Fetched from API</h1>}
+      {apidata}     
     </div>
   );
 };
