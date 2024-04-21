@@ -1,13 +1,35 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-import React from "react";
-import './../styles/App.css';
+export default function App() {
+  const [isvissible, setIsvissible] = useState(true);
+  const [apidata, setApidata] = useState([]);
 
-const App = () => {
+  useEffect(()=>{
+    const fetchdata = async () =>{
+      try{
+        let response = await axios.get('https://dummyjson.com/products');
+        response = JSON.stringify(response.data);
+        setIsvissible(false);
+        setApidata(response);
+        console.log("Fetched Data: ",response);
+
+      }
+      catch(error){
+        console.log(error);
+      }
+    }
+    fetchdata();
+  },[])
+
   return (
     <div>
-        {/* Do not remove the main div */}
+      { isvissible && <p>loading</p>}
+      
+      <div>
+        <h4><u>OUTPUT</u></h4>
+        {apidata}
+      </div>    
     </div>
-  )
-}
-
-export default App
+  );
+};
